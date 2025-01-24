@@ -130,7 +130,7 @@ background: linear-gradient(to bottom, #ef473a, #cb2d3e);
 
 
 /* login page /******************************* */
-
+input{color: #000;}
 
 .main-content{
 	width: 50%;

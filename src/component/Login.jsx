@@ -1,7 +1,30 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "./redux/authSlice";
 
 const Login = () => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+  
+	const dispatch = useDispatch();
+	const navigate = useNavigate(); 
+	const { loading, error, user, token } = useSelector((state) => state.user);
+	console.log(token)
+  
+	const handleSubmit = (e) => {
+	  e.preventDefault();
+  
+	  dispatch(loginUser({ email, password }))
+		.unwrap() 
+		.then(() => {
+		  navigate("/"); 
+		})
+		.catch((err) => {
+		  console.error("Login failed: ", err);
+		});
+	};
+  
   return (
    <>
    <div class="container-fluid">
@@ -16,21 +39,36 @@ const Login = () => {
 						<h2>Log In</h2>
 					</div>
 					<div class="row">
-						<form control="" class="form-group">
-							<div class="row">
-								<input type="text" name="username" id="username" class="form__input" placeholder="Username"/>
-							</div>
-							<div class="row">
-								<input type="password" name="password" id="password" class="form__input" placeholder="Password"/>
-							</div>
-							<div class="d-flex">
-								<input type="checkbox" name="remember_me" id="remember_me" class=""/>
-								<label for="remember_me">Remember Me!</label>
-							</div>
-							<div class="d-flex justify-content-center">
-								<input type="submit" value="Submit" class="btn"/>
-							</div>
-						</form>
+					<form onSubmit={handleSubmit} className="form-group">
+                 
+                  <div className="row">
+                    <input
+                      type="email"
+					  id="email"
+					  value={email}
+					  onChange={(e) => setEmail(e.target.value)}
+                      className="form__input"
+                      placeholder="Email"
+                      required
+                    />
+                  </div>
+                  <div className="row">
+                    <input
+                     type="password"
+					 id="password"
+					 value={password}
+					 onChange={(e) => setPassword(e.target.value)}
+                      className="form__input"
+                      placeholder="Password"
+                      required
+                    />
+                  </div>
+                 
+				  {error && <p className="error-message">{error}</p>}
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+                </form>
 					</div>
 					<div class="row">
 						<p>Don't have an account? <Link to="/register">Register Here</Link></p>

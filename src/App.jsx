@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Blog from './component/Blog'
 import Navbar from './component/Navbar'
 import Login from './component/Login'
 import { Route, Routes } from 'react-router-dom'
 import Register from './component/Register';
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from './component/redux/authSlice'
 
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  const {token , expirationTime} = useSelector((state)=> state.user)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(loginUser({ token }));
+      navigate("/"); 
+    }
+  }, [dispatch, navigate]);
   return (
     <>
     <Navbar/>
