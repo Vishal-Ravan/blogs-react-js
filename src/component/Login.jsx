@@ -9,21 +9,22 @@ const Login = () => {
   
 	const dispatch = useDispatch();
 	const navigate = useNavigate(); 
-	const { loading, error, user, token } = useSelector((state) => state.user);
-	console.log(token)
+	const { loading, error,  token } = useSelector((state) => state.user);
+	// console.log(token)
   
 	const handleSubmit = (e) => {
-	  e.preventDefault();
-  
-	  dispatch(loginUser({ email, password }))
-		.unwrap() 
-		.then(() => {
-		  navigate("/"); 
-		})
-		.catch((err) => {
-		  console.error("Login failed: ", err);
-		});
-	};
+  e.preventDefault();
+
+  dispatch(loginUser({ email, password }))
+    .unwrap()
+    .then(() => {
+      navigate("/", { replace: true }); // use replace to prevent going back to login
+    })
+    .catch((err) => {
+      console.error("Login failed: ", err);
+    });
+};
+
   
   return (
    <>

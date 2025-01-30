@@ -42,10 +42,32 @@ export const loginUser = createAsyncThunk("loginUser", async (body) => {
   return await res.json();
 });
 
+
+export const fetchBlogs = createAsyncThunk("fetchBlogs", async () => {
+  const res = await fetch("http://localhost:5000/api/blogs", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch blogs");
+  }
+
+  return await res.json();
+});
+
+
+
+
 // Slice definition
 const authSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: {
+    ...initialState,
+    blogs: [],
+  },
   reducers: {
     logoutUser: (state) => {
       state.user = "";
@@ -90,7 +112,19 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Invalid credentials";
-      });
+      })
+      .addCase(fetchBlogs.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(fetchBlogs.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.blogs = payload;
+      })
+      .addCase(fetchBlogs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch blogs";
+      })
   },
 });
 

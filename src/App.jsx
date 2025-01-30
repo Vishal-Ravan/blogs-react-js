@@ -7,6 +7,7 @@ import Register from './component/Register';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from './component/redux/authSlice'
+import BlogDetails from './component/BlogDetails'
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/" element={<Blog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/blog-details/:id" element={<BlogDetails />} />
       </Routes>
     </>
   )
